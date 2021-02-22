@@ -144,9 +144,12 @@
   <ItemGroup>
     <ClCompile Include="Code\App.cpp" />
     <ClCompile Include="Code\Main.cpp" />
+    <ClCompile Include="Code\ParticlesEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\App.h" />
+    <ClInclude Include="Code\ParticlesEngine.h" />
+    <ClInclude Include="Code\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
