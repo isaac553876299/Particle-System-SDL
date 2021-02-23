@@ -6,6 +6,7 @@
 class App
 {
 public:
+
 	bool active;
 	SDL_Window* window = nullptr;
 	SDL_Renderer* renderer = nullptr;
@@ -22,11 +23,17 @@ public:
 	int keyboard[200];
 
 	App();
+
 	~App();
+
 	void Input();
+
 	void Update();
+
 	void Draw();
+
 	bool Running();
+
 };
 
 #endif

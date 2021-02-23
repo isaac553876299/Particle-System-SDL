@@ -3,41 +3,39 @@
 
 #include "Utils.h"
 
-struct Particle { int x, y, vx, vy; };
+struct iVec2
+{
+	int x, y;
+};
+
+struct fVec2
+{
+	float x, y;
+};
+
+struct Particle
+{
+	iVec2 position;
+	iVec2 velocity;
+	float lifetime;
+};
 
 class ParticlesEngine
 {
 public:
 
-	ParticlesEngine()
-	{
 
-	}
-	~ParticlesEngine()
-	{
 
-	}
-	void Step(Mouse mouse, float dt, SDL_Renderer* renderer)
-	{
-		Input(mouse);
-		Update(dt);
-		Draw(renderer);
-	}
+	ParticlesEngine();
 
-	void Input(Mouse mouse)
-	{
+	~ParticlesEngine();
 
-	}
+	void Step(float dt, SDL_Renderer* renderer);
 
-	void Update(float dt)
-	{
+	void Update(float dt);
 
-	}
+	void Draw(SDL_Renderer* renderer);
 
-	void Draw(SDL_Renderer* renderer)
-	{
-
-	}
 };
 
 #endif
