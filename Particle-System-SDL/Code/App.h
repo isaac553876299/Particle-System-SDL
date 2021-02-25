@@ -2,6 +2,7 @@
 #define _APP_H_
 
 #include "Utils.h"
+#include "ParticlesEngine.h"
 
 class App
 {
@@ -21,6 +22,8 @@ public:
 	//KeyStates::IDLE_0,DOWN_1,REPEAT_2,UP_3
 	Mouse mouse;
 	int keyboard[200];
+
+	ParticlesEngineManager* engine = nullptr;
 
 	App();
 

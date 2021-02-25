@@ -5,6 +5,7 @@ App::App()
 	active = true;
 	SDL_Init(SDL_INIT_EVERYTHING);
 	SDL_CreateWindowAndRenderer(WWIDTH, WHEIGHT, 0, &window, &renderer);
+	srand(time(0));
 
 	mouse = { 0,0,0,0,0,0 };
 
@@ -14,6 +15,8 @@ App::App()
 	seconds = SDL_GetTicks();
 	fpsCount = 0;
 	fps = 0;
+
+	engine = new ParticlesEngineManager(5);
 }
 
 App::~App()
@@ -88,12 +91,12 @@ void App::Update()
 		fpsCount = 0;
 	}
 
-	//updates
-
 	static char title[256];
 	sprintf_s(title, 256, "fps(%d) dt(%.4f)",
 		fps, dt);
 	SDL_SetWindowTitle(window, title);
+
+	engine->Step(mouse, dt);
 }
 
 void App::Draw()
@@ -102,7 +105,7 @@ void App::Draw()
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
 	
-	//draws
+	engine->Draw(renderer);
 
 	SDL_RenderPresent(renderer);
 }

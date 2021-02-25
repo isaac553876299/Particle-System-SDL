@@ -1,27 +1,59 @@
 #include "ParticlesEngine.h"
 
-ParticlesEngine::ParticlesEngine()
+ParticlesEngineManager::ParticlesEngineManager(int maxe)
+{
+	maxEmitters = maxe;
+}
+
+ParticlesEngineManager::~ParticlesEngineManager()
 {
 
 }
 
-ParticlesEngine::~ParticlesEngine()
+void ParticlesEngineManager::AddEmitter(int maxp, iVec2 pos)
 {
-
+	for (int i = 0; i < maxEmitters; i++)
+	{
+		if (emitters[i] == nullptr)
+		{
+			emitters[i] = new Emitter(maxp, pos);
+			break;
+		}
+	}
 }
 
-void ParticlesEngine::Step(float dt, SDL_Renderer* renderer)
+void ParticlesEngineManager::Step(Mouse mouse, float dt)
 {
+	Input(mouse);
 	Update(dt);
-	Draw(renderer);
 }
 
-void ParticlesEngine::Update(float dt)
+void ParticlesEngineManager::Input(Mouse mouse)
 {
-
+	if (mouse.stateL == 1)
+	{
+		AddEmitter(10, { mouse.x,mouse.y });
+	}
 }
 
-void ParticlesEngine::Draw(SDL_Renderer* renderer)
+void ParticlesEngineManager::Update(float dt)
 {
+	for (int i = 0; i < maxEmitters; i++)
+	{
+		if (emitters[i] != nullptr)
+		{
+			emitters[i]->Update(dt);
+		}
+	}
+}
 
+void ParticlesEngineManager::Draw(SDL_Renderer* renderer)
+{
+	for (int i = 0; i < maxEmitters; i++)
+	{
+		if (emitters[i] == nullptr)
+		{
+			emitters[i]->Draw(renderer);
+		}
+	}
 }

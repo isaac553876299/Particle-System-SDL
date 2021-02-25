@@ -2,6 +2,7 @@
 #define _UTILS_H_
 
 #include <iostream>
+#include <time.h>
 #include "SDL.h"
 
 #define RELEASE(x) { delete x; x = nullptr; }
@@ -18,10 +19,18 @@ struct Mouse { int x, y, offsx, offsy, stateL, stateR; };
 struct Timer
 {
 	Uint32 time;
-	Timer() { Start(); };
-	void Start() { time = SDL_GetTicks(); };
-	inline Uint32 msRead() { return (SDL_GetTicks() - time); };
-	inline float sRead() { return float((SDL_GetTicks() - time) / 1000.f); };
+
+	Timer()
+	{ Start(); };
+
+	void Start()
+	{ time = SDL_GetTicks(); };
+
+	inline Uint32 msRead()
+	{ return (SDL_GetTicks() - time); };
+
+	inline float sRead()
+	{ return float((SDL_GetTicks() - time) / 1000.f); };
 };
 
 #endif
