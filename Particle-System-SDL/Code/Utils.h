@@ -20,17 +20,13 @@ struct Timer
 {
 	Uint32 time;
 
-	Timer()
-	{ Start(); };
+	Timer() { Start(); };
 
-	void Start()
-	{ time = SDL_GetTicks(); };
+	void Start() { time = SDL_GetTicks(); };
 
-	inline Uint32 msRead()
-	{ return (SDL_GetTicks() - time); };
+	inline Uint32 msRead() { return (SDL_GetTicks() - time); };
 
-	inline float sRead()
-	{ return float((SDL_GetTicks() - time) / 1000.f); };
+	inline float sRead() { return float((SDL_GetTicks() - time) / 1000.f); };
 };
 
 #endif
