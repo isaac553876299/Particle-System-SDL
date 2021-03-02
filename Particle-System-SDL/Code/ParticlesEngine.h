@@ -7,7 +7,16 @@ struct iVec2 { int x, y; };
 
 struct fVec2 { float x, y; };
 
-struct Particle { float lifetime; iVec2 position, velocity; };
+struct Particle { int lifetime; iVec2 position, velocity; };// int pathSize; iVec2* trace; };
+
+enum class EmitterType
+{
+	SPARKLES,
+	RAIN,
+	SNOW,
+	FIRE,
+	FIREWORKS,
+};
 
 class Emitter
 {
@@ -17,11 +26,18 @@ public:
 	int maxParticles;
 	Particle* particles = nullptr;
 
+	Emitter()
+	{
+
+	}
+
 	Emitter(iVec2 pos, int maxp) : position(pos), maxParticles(maxp)
 	{
 		particles = new Particle[maxParticles];
 		for (int i = 0; i < maxParticles; i++)
-			particles[i] = { 60,position,{ ((rand() % 20) - 10),((rand() % 20) - 10) } };
+		{
+			particles[i] = addParticle();
+		}
 	}
 
 	~Emitter()
@@ -29,15 +45,21 @@ public:
 		RELEASE_ARRAY(particles);
 	}
 
-	//RandomParticle
-	//{ 60,position,{ ((rand() % 20) - 10),((rand() % 20) - 10) } };
+	Particle addParticle()
+	{
+		Particle p;
+		p = { (rand() % 30) + 60,position,{ ((rand() % 20) - 10),((rand() % 20) - 10) } };
+		//p.pathSize = p.lifetime;
+		//p.trace = new iVec2[p.pathSize];
+		return p;
+	}
 
 	void Update(float dt)
 	{
 		for (int i = 0; i < maxParticles; i++)
 		{
 			if (particles[i].lifetime == 0)
-				particles[i] = { 60,position,{ ((rand() % 20) - 10),((rand() % 20) - 10) } };
+				particles[i] = addParticle();
 			
 			particles[i].lifetime--;
 			particles[i].position.x += particles[i].velocity.x;
@@ -47,15 +69,20 @@ public:
 
 	void Draw(SDL_Renderer* renderer, bool debugdraw)
 	{
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		for (int i = 0; i < maxParticles; i++)
 		{
-			//SDL_RenderDrawPoint(renderer, particles[i].position.x, particles[i].position.y);
-			SDL_Rect r{ particles[i].position.x - 1, particles[i].position.y - 1,3,3 };
-			SDL_RenderDrawRect(renderer, &r);
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+			SDL_RenderDrawPoint(renderer, particles[i].position.x, particles[i].position.y);
+			SDL_Rect r1{ particles[i].position.x - 2, particles[i].position.y - 2,5,5 };
+			SDL_RenderDrawRect(renderer, &r1);
 			if (debugdraw)
 			{
-				SDL_RenderDrawLine(renderer, position.x, position.y, particles[i].position.x, particles[i].position.y);
+				SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+				SDL_RenderDrawLine(renderer, particles[i].position.x, particles[i].position.y, particles[i].position.x + particles[i].velocity.x * 10, particles[i].position.y + particles[i].velocity.y * 10);
+				SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+				SDL_Rect r2{ particles[i].position.x - particles[i].lifetime / 2,particles[i].position.y - particles[i].lifetime / 2,particles[i].lifetime,particles[i].lifetime };
+				SDL_RenderDrawRect(renderer, &r2);
+
 			}
 		}
 		if (debugdraw)
@@ -66,6 +93,27 @@ public:
 		}
 	}
 
+};
+
+class Sparkles : public Emitter
+{
+public:
+	Sparkles()
+	{
+
+	}
+	~Sparkles()
+	{
+
+	}
+	void Update(float dt)
+	{
+
+	}
+	void Draw(SDL_Renderer* renderer, bool debugdraw)
+	{
+
+	}
 };
 
 class Manager
@@ -95,7 +143,7 @@ public:
 	void Input(Mouse mouse, int keyboard[200])
 	{
 		if (mouse.stateL == 1)
-			AddEmitter({ mouse.x,mouse.y }, 10);
+			AddEmitter({ mouse.x,mouse.y }, 1000);
 		debugdraw = bool(keyboard[SDL_SCANCODE_D] == 2);
 	}
 

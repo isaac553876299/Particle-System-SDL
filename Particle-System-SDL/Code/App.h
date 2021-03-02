@@ -117,7 +117,7 @@ public:
 		}
 
 		static char title[256];
-		sprintf_s(title, 256, "fps(%d) dt(%.4f)",
+		sprintf_s(title, 256, "fps(%d) dt(%.3f)",
 			fps, dt);
 		SDL_SetWindowTitle(window, title);
 
