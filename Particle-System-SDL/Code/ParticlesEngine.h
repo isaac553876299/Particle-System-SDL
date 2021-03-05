@@ -80,13 +80,13 @@ public:
 		switch (type)
 		{
 		case EmitterType::SPARKLES:
-			p = { (rand() % 30) + 60,position,{ ((rand() % 20) - 10),((rand() % 20) - 10) } };
+			p = { (rand() % 30) + 60,position,{((rand() % 20) - 10),((rand() % 20) - 10)} };
 			break;
 		case EmitterType::RAIN:
-			p = { (rand() % 30) + 60,position,{ ((rand() % 20) - 10),((rand() % 20) - 10) } };
+			p = { (rand() % 30) + 60,{position.x + (rand() % 200) - 100,position.y},{0,(rand() % 5) + 10} };
 			break;
 		case EmitterType::SNOW:
-
+			p = { (rand() % 30) + 60,{position.x + (rand() % 200) - 100,position.y},{(rand() % 3) - 1,(rand() % 3) + 1} };
 			break;
 		case EmitterType::FIRE:
 
