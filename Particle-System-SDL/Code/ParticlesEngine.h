@@ -170,7 +170,7 @@ public:
 		emitters = new Emitter(t, p, m);
 	}
 
-	void Input(Mouse mouse, int keyboard[200])
+	void Input(Mouse mouse, int* keyboard)
 	{
 		if (keyboard[SDL_SCANCODE_1] == 1)
 			AddEmitter(EmitterType::SPARKLES, { mouse.x,mouse.y }, 10);

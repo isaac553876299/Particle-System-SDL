@@ -91,13 +91,8 @@ public:
 
 		for (int i = 0; i < 200; i++)
 		{
-			if (keyboard[i] == 3) keyboard[i] = 0;
-			if (keyboardState[i])
-			{
-				if (keyboard[i] == 0 || keyboard[i] == 3) keyboard[i] = 1;
-				if (keyboard[i] == 1) keyboard[i] = 2;
-			}
-			else if (keyboard[i] != 0) keyboard[i] = 3;
+			if (keyboardState[i]) keyboard[i] = (keyboard[i] == 1 || keyboard[i] == 2) ? 2 : 1;
+			else keyboard[i] = (keyboard[i] == 1 || keyboard[i] == 2) ? 3 : 0;
 		}
 	}
 
@@ -117,8 +112,8 @@ public:
 		}
 
 		static char title[256];
-		sprintf_s(title, 256, "fps(%d) dt(%.3f)",
-			fps, dt);
+		sprintf_s(title, 256, "fps(%d) dt(%.3f) %i",
+			fps, dt, keyboard[SDL_SCANCODE_1]);
 		SDL_SetWindowTitle(window, title);
 
 		engine->Input(mouse, keyboard);
