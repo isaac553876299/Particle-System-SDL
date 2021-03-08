@@ -23,6 +23,7 @@ class Emitter
 {
 public:
 
+	bool active;
 	iVec2 position;
 	int maxParticles;
 	EmitterType type;
@@ -30,21 +31,27 @@ public:
 
 	Emitter()
 	{
-
-	}
-
-	Emitter(EmitterType _type, iVec2 _position, int _maxParticles) : type(_type), position(_position), maxParticles(_maxParticles)
-	{
-		particles = new Particle[maxParticles];
-		for (int i = 0; i < maxParticles; i++)
-		{
-			particles[i] = addParticle();
-		}
+		active = false;
 	}
 
 	~Emitter()
 	{
 		RELEASE_ARRAY(particles);
+	}
+
+	void Init(EmitterType _type, iVec2 _position, int _maxParticles)
+	{
+		active = true;
+
+		type = _type;
+		position = _position;
+		maxParticles = _maxParticles;
+
+		particles = new Particle[maxParticles];
+		for (int i = 0; i < maxParticles; i++)
+		{
+			particles[i] = addParticle();
+		}
 	}
 
 	/*
@@ -156,7 +163,7 @@ public:
 
 	Manager(int maxe) : maxEmitters(maxe)
 	{
-		
+		emitters = new Emitter[maxEmitters];
 	}
 
 	~Manager()
@@ -166,8 +173,14 @@ public:
 
 	void AddEmitter(EmitterType t, iVec2 p, int m)
 	{
-		RELEASE(emitters);
-		emitters = new Emitter(t, p, m);
+		for (int i = 0; i < maxEmitters; i++)
+		{
+			if (!emitters[i].active)
+			{
+				emitters[i].Init(t, p, m);
+				break;
+			}
+		}
 	}
 
 	void Input(Mouse mouse, int* keyboard)
@@ -196,13 +209,29 @@ public:
 	void Update(float dt)
 	{
 		if (emitters != nullptr)
-			emitters->Update(dt);
+		{
+			for (int i = 0; i < maxEmitters; i++)
+			{
+				if (emitters[i].active)
+				{
+					emitters[i].Update(dt);
+				}
+			}
+		}
 	}
 
 	void Draw(SDL_Renderer* renderer)
 	{
 		if (emitters != nullptr)
-			emitters->Draw(renderer, debugdraw);
+		{
+			for (int i = 0; i < maxEmitters; i++)
+			{
+				if (emitters[i].active)
+				{
+					emitters[i].Draw(renderer, debugdraw);
+				}
+			}
+		}
 	}
 
 };
