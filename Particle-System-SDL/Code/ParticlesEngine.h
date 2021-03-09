@@ -93,8 +93,34 @@ public:
 				particles[i] = addParticle();
 			
 			particles[i].lifetime--;
-			particles[i].position.x += particles[i].velocity.x;
-			particles[i].position.y += particles[i].velocity.y;
+
+			switch (type)
+			{
+			case EmitterType::SPARKLES:
+				particles[i].position.x += particles[i].velocity.x;
+				particles[i].position.y += particles[i].velocity.y;
+				break;
+			case EmitterType::RAIN:
+				particles[i].position.x += particles[i].velocity.x;
+				particles[i].position.y += particles[i].velocity.y;
+				break;
+			case EmitterType::SNOW:
+				particles[i].position.x += particles[i].velocity.x;
+				particles[i].position.y += particles[i].velocity.y;
+				break;
+			case EmitterType::FIRE:
+				particles[i].position.x += particles[i].velocity.x;
+				particles[i].position.y += particles[i].velocity.y;
+				break;
+			case EmitterType::SMOKE:
+
+				break;
+			case EmitterType::FIREWORKS:
+
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
