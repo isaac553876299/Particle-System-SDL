@@ -54,32 +54,6 @@ public:
 		}
 	}
 
-	/*
-	switch (type)
-		{
-		case EmitterType::SPARKLES:
-
-			break;
-		case EmitterType::RAIN:
-
-			break;
-		case EmitterType::SNOW:
-
-			break;
-		case EmitterType::FIRE:
-
-			break;
-		case EmitterType::SMOKE:
-
-			break;
-		case EmitterType::FIREWORKS:
-
-			break;
-		default:
-			break;
-		}
-	*/
-
 	Particle addParticle()
 	{
 		Particle p;
@@ -146,8 +120,8 @@ public:
 		if (debugdraw)
 		{
 			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-			SDL_RenderDrawLine(renderer, 0, position.y, WWIDTH, position.y);
-			SDL_RenderDrawLine(renderer, position.x, 0, position.x, WHEIGHT);
+			SDL_RenderDrawLine(renderer, position.x - 10, position.y, position.x + 10, position.y);
+			SDL_RenderDrawLine(renderer, position.x, position.y - 10, position.x, position.y + 10);
 		}
 	}
 

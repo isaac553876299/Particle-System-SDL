@@ -112,8 +112,8 @@ public:
 		}
 
 		static char title[256];
-		sprintf_s(title, 256, "fps(%d) dt(%.3f) %i",
-			fps, dt, keyboard[SDL_SCANCODE_1]);
+		sprintf_s(title, 256, "fps(%d) dt(%.3f)",
+			fps, dt);
 		SDL_SetWindowTitle(window, title);
 
 		engine->Input(mouse, keyboard);
