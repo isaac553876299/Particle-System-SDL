@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<combat>
+  <player>
+    <stats hp="100" lvlhp="12" atk="50" lvlatk="6" def="50" lvldef="5" turntime="1.5"/>
+  </player>
+  
+  <allies>
+    <ally1>
+      <stats hp="80" lvlhp="8" atk="60" lvltk="6" def="45" lvldef="4" turntime="1.6"/>
+    </ally1>
+  </allies>
+  
+  <enemies>
+    <tank>
+      <stats hp="150" lvlhp="15" atk="30" lvltk="3" def="60" lvldef="6" turntime="2"/>
+    </tank>
+    <damage>
+      <stats hp="60" lvlhp="7" atk="70" lvltk="7" def="40" lvldef="4" turntime="1.8"/>
+    </damage>
+    <balanced>
+      <stats hp="80" lvlhp="8" atk="50" lvltk="5" def="45" lvldef="5" turntime="1.5"/>
+    </balanced>
+  </enemies>
+  
+</combat>
