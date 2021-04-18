@@ -1,7 +1,15 @@
 #ifndef _PARTICLESENGINE_H_
 #define _PARTICLESENGINE_H_
 
-#include "Utils.h"
+#include <time.h>
+
+#include "SDL.h"
+#include "SDL_image.h"
+#include "SDL_ttf.h"
+#include "pugixml.hpp"
+
+#define RELEASE(x) { delete x; x = nullptr; }
+#define RELEASE_ARRAY(x) { delete[] x; x = nullptr; }
 
 struct iVec2 { int x, y; };
 
@@ -153,7 +161,7 @@ public:
 
 };
 
-class Manager
+class ParticleSystem
 {
 public:
 
@@ -161,12 +169,12 @@ public:
 	Emitter* emitters = nullptr;
 	bool debugdraw = false;
 
-	Manager(int maxe) : maxEmitters(maxe)
+	ParticleSystem(int maxe) : maxEmitters(maxe)
 	{
 		emitters = new Emitter[maxEmitters];
 	}
 
-	~Manager()
+	~ParticleSystem()
 	{
 		RELEASE_ARRAY(emitters);
 	}
@@ -183,31 +191,29 @@ public:
 		}
 	}
 
-	void Input(Mouse mouse, int* keyboard)
+	void Update(float dt, int* mouse, int* keyboard)
 	{
 		if (keyboard[SDL_SCANCODE_1] == 1)
-			AddEmitter(EmitterType::SPARKLES, { mouse.x,mouse.y }, 10);
+			AddEmitter(EmitterType::SPARKLES, { mouse[0],mouse[1] }, 10);
 
 		if (keyboard[SDL_SCANCODE_2] == 1)
-			AddEmitter(EmitterType::RAIN, { mouse.x,mouse.y }, 10);
+			AddEmitter(EmitterType::RAIN, { mouse[0],mouse[1] }, 10);
 
 		if (keyboard[SDL_SCANCODE_3] == 1)
-			AddEmitter(EmitterType::SNOW, { mouse.x,mouse.y }, 10);
+			AddEmitter(EmitterType::SNOW, { mouse[0],mouse[1] }, 10);
 
 		if (keyboard[SDL_SCANCODE_4] == 1)
-			AddEmitter(EmitterType::FIRE, { mouse.x,mouse.y }, 10);
+			AddEmitter(EmitterType::FIRE, { mouse[0],mouse[1] }, 10);
 
 		if (keyboard[SDL_SCANCODE_5] == 1)
-			AddEmitter(EmitterType::SMOKE, { mouse.x,mouse.y }, 10);
+			AddEmitter(EmitterType::SMOKE, { mouse[0],mouse[1] }, 10);
 
 		if (keyboard[SDL_SCANCODE_6] == 1)
-			AddEmitter(EmitterType::FIREWORKS, { mouse.x,mouse.y }, 10);
+			AddEmitter(EmitterType::FIREWORKS, { mouse[0],mouse[1] }, 10);
 
 		debugdraw = bool(keyboard[SDL_SCANCODE_D] == 2);
-	}
 
-	void Update(float dt)
-	{
+
 		if (emitters != nullptr)
 		{
 			for (int i = 0; i < maxEmitters; i++)

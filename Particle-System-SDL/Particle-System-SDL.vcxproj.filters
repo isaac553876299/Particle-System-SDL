@@ -20,14 +20,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Code\App.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Code\ParticlesEngine.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Utils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Code\Animation.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\List.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
