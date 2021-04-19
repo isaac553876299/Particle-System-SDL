@@ -1,5 +1,13 @@
 <?xml version="1.0"?>
-<particles>
-  <type hp="100" lvlhp="12" atk="50" lvlatk="6" def="50" lvldef="5" turntime="1.5"/>
-  <type hp="100" lvlhp="12" atk="50" lvlatk="6" def="50" lvldef="5" turntime="1.5"/>
-</particles>
+<ParticlesProperties>
+  <Explosion>
+    <lifespan value="60.0" rand="0.5"/>
+    <velocity minX="-10.0" maxX="10.0" minY="-10.0" maxY="10.0"/>
+    <gravity valueX="0.0" valueY="0.0"/>
+  </Explosion>
+  <Type>
+    <lifespan value="60.0" rand="0.5"/>
+    <velocity minX="-10.0" maxX="10.0" minY="-10.0" maxY="10.0"/>
+    <gravity valueX="0.0" valueY="0.0"/>
+  </Type>
+</ParticlesProperties>

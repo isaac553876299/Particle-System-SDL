@@ -41,7 +41,7 @@ public:
 	iVec2 position;
 	int maxParticles;
 	EmitterType type;
-	Particle* particles = nullptr;
+	Particle* particles;
 
 	Emitter()
 	{
