@@ -7,6 +7,7 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 #include "pugixml.hpp"
+#include "List.h"
 
 #define RELEASE(x) { delete x; x = nullptr; }
 #define RELEASE_ARRAY(x) { delete[] x; x = nullptr; }
@@ -15,7 +16,12 @@ struct iVec2 { int x, y; };
 
 struct fVec2 { float x, y; };
 
-struct Particle { int lifetime; iVec2 position, velocity; };
+struct Particle
+{
+	int lifetime;
+	iVec2 position;
+	iVec2 velocity;
+};
 
 enum class EmitterType
 {
@@ -99,7 +105,7 @@ public:
 		{
 			if (particles[i].lifetime == 0)
 				particles[i] = addParticle();
-			
+
 			particles[i].lifetime--;
 
 			switch (type)
@@ -132,7 +138,7 @@ public:
 		}
 	}
 
-	void Draw(SDL_Renderer* renderer, bool debugdraw)
+	void Draw(SDL_Renderer* renderer, bool debugDraw)
 	{
 		for (int i = 0; i < maxParticles; i++)
 		{
@@ -151,7 +157,7 @@ public:
 
 			}*/
 		}
-		if (debugdraw)
+		if (debugDraw)
 		{
 			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 			SDL_RenderDrawLine(renderer, position.x - 10, position.y, position.x + 10, position.y);
@@ -165,79 +171,49 @@ class ParticleSystem
 {
 public:
 
-	int maxEmitters;
-	Emitter* emitters = nullptr;
-	bool debugdraw = false;
+	List<Emitter*>* emitters;
+	bool debugDraw = false;
 
-	ParticleSystem(int maxe) : maxEmitters(maxe)
+	ParticleSystem()
 	{
-		emitters = new Emitter[maxEmitters];
+		srand(time(0));
 	}
 
 	~ParticleSystem()
 	{
-		RELEASE_ARRAY(emitters);
+		RELEASE(emitters);
 	}
 
 	void AddEmitter(EmitterType t, iVec2 p, int m)
 	{
-		for (int i = 0; i < maxEmitters; i++)
-		{
-			if (!emitters[i].active)
-			{
-				emitters[i].Init(t, p, m);
-				break;
-			}
-		}
+		Emitter emitter;
+		emitter.Init(t, p, m);
+		emitters->Add(&emitter);
 	}
 
 	void Update(float dt, int* mouse, int* keyboard)
 	{
-		if (keyboard[SDL_SCANCODE_1] == 1)
-			AddEmitter(EmitterType::SPARKLES, { mouse[0],mouse[1] }, 10);
+		if (keyboard[SDL_SCANCODE_1] == 1) AddEmitter(EmitterType::SPARKLES, { mouse[0],mouse[1] }, 10);
 
-		if (keyboard[SDL_SCANCODE_2] == 1)
-			AddEmitter(EmitterType::RAIN, { mouse[0],mouse[1] }, 10);
+		if (keyboard[SDL_SCANCODE_2] == 1) AddEmitter(EmitterType::RAIN, { mouse[0],mouse[1] }, 10);
 
-		if (keyboard[SDL_SCANCODE_3] == 1)
-			AddEmitter(EmitterType::SNOW, { mouse[0],mouse[1] }, 10);
+		if (keyboard[SDL_SCANCODE_3] == 1) AddEmitter(EmitterType::SNOW, { mouse[0],mouse[1] }, 10);
 
-		if (keyboard[SDL_SCANCODE_4] == 1)
-			AddEmitter(EmitterType::FIRE, { mouse[0],mouse[1] }, 10);
+		if (keyboard[SDL_SCANCODE_4] == 1) AddEmitter(EmitterType::FIRE, { mouse[0],mouse[1] }, 10);
 
-		if (keyboard[SDL_SCANCODE_5] == 1)
-			AddEmitter(EmitterType::SMOKE, { mouse[0],mouse[1] }, 10);
+		if (keyboard[SDL_SCANCODE_5] == 1) AddEmitter(EmitterType::SMOKE, { mouse[0],mouse[1] }, 10);
 
-		if (keyboard[SDL_SCANCODE_6] == 1)
-			AddEmitter(EmitterType::FIREWORKS, { mouse[0],mouse[1] }, 10);
+		if (keyboard[SDL_SCANCODE_6] == 1) AddEmitter(EmitterType::FIREWORKS, { mouse[0],mouse[1] }, 10);
 
-		debugdraw = bool(keyboard[SDL_SCANCODE_D] == 2);
+		debugDraw = bool(keyboard[SDL_SCANCODE_D] == 2);
+		//if (keyboard[SDL_SCANCODE_D] == 1) debugDraw = !debugDraw;
 
-
-		if (emitters != nullptr)
-		{
-			for (int i = 0; i < maxEmitters; i++)
-			{
-				if (emitters[i].active)
-				{
-					emitters[i].Update(dt);
-				}
-			}
-		}
+		for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next) emitter->data->Update(dt);
 	}
 
 	void Draw(SDL_Renderer* renderer)
 	{
-		if (emitters != nullptr)
-		{
-			for (int i = 0; i < maxEmitters; i++)
-			{
-				if (emitters[i].active)
-				{
-					emitters[i].Draw(renderer, debugdraw);
-				}
-			}
-		}
+		for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next) emitter->data->Draw(renderer, debugDraw);
 	}
 
 };

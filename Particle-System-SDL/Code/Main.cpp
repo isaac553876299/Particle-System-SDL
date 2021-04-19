@@ -45,8 +45,6 @@ int main(int argc, char** argv)
 	SDL_Window* window = SDL_CreateWindow("Particles Engine Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, 0);
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
-	srand(time(0));
-
 	float dt;
 	Timer timer;
 	Uint32 seconds = SDL_GetTicks();
@@ -90,8 +88,6 @@ int main(int argc, char** argv)
 
 		int keyMap[2][4] = { 0,3,3,0,1,2,2,1 };
 		for (int i = 0; i < 200; ++i) keyboard[i] = keyMap[(int)(keys[i])][keyboard[i]];
-		//if (keys[i]) keyboard[i] = (keyboard[i] == 1 || keyboard[i] == 2) ? 2 : 1;
-		//else keyboard[i] = (keyboard[i] == 1 || keyboard[i] == 2) ? 3 : 0;
 
 		dt = timer.sRead();
 		timer.Start();
@@ -104,6 +100,11 @@ int main(int argc, char** argv)
 			fps = fpsCount;
 			fpsCount = 0;
 		}
+
+		static char title[256];
+		sprintf_s(title, 256, " | fps: %d | dt: %.3f | ",
+			fps, dt);
+		SDL_SetWindowTitle(window, title);
 
 		particlesEngine->Update(dt, mouse, keyboard);
 

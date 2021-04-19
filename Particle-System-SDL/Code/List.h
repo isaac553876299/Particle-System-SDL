@@ -8,9 +8,9 @@ struct ListItem
 	ListItem<tdata>* next;
 	ListItem<tdata>* prev;
 
-	inline ListItem(const tdata& pData)
+	ListItem(const tdata& _data)
 	{
-		data = pData;
+		data = _data;
 		next = prev = 0;
 	}
 };
@@ -25,7 +25,7 @@ public:
 
 	unsigned int size;
 
-	inline List()
+	List()
 	{
 		start = end = 0;
 		size = 0;
@@ -36,107 +36,44 @@ public:
 		Clear();
 	}
 
-	unsigned int Count() const
-	{
-		return size;
-	}
-
 	ListItem<tdata>* Add(const tdata& item)
 	{
-		ListItem<tdata>* dataItem;
-		dataItem = new ListItem<tdata>(item);
+		ListItem<tdata>* newItem = new ListItem<tdata>(item);
 
-		if(!start)
-		{
-			start = end = dataItem;
-		}
+		if (!start) start = end = newItem;
 		else
 		{
-			dataItem->prev = end;
-			end->next = dataItem;
-			end = dataItem;
+			newItem->prev = end;
+			end->next = newItem;
+			end = newItem;
 		}
 
 		++size;
-		return(dataItem);
+		return(newItem);
 	}
 
 	void Del(ListItem<tdata>* item)
 	{
-		if(item->prev)
-		{
-			item->prev->next = item->next;
-
-			if(item->next)
-			{
-				item->next->prev = item->prev;
-			}
-			else
-			{
-				end = item->prev;
-			}
-		}
-		else
-		{
-			if(item->next)
-			{
-				item->next->prev = 0;
-				start = item->next;
-			}
-			else
-			{
-				start = end = 0;
-			}
-		}
-
-		RELEASE(item);
+		item->prev->next = item->next;
+		item->next->prev = item->prev;
+		delete item;
 		--size;
 	}
 
 	void Clear()
 	{
-		ListItem<tdata>* pData = start;
-		ListItem<tdata>* pNext;
+		ListItem<tdata>* tmpData = start;
+		ListItem<tdata>* tmpNext;
 
-		while(pData)
+		while(tmpData)
 		{
-			pNext = pData->next;
-			RELEASE(pData);
-			pData = pNext;
+			tmpNext = tmpData->next;
+			delete tmpData;
+			tmpData = tmpNext;
 		}
 
 		start = end = 0;
 		size = 0;
-	}
-
-	tdata& operator [](const unsigned int index)
-	{
-		unsigned int  pos = 0;
-		ListItem<tdata>* pItem = start;
-
-		while (pItem && pos != index)
-		{
-			++pos;
-			pItem = pItem->next;
-		}
-
-		return(pItem->data);
-	}
-
-	int Find(const tdata& data)
-	{
-		ListItem<tdata>* tmp = start;
-		int index = 0;
-
-		while(tmp)
-		{
-			if (tmp->data == data)
-				return(index);
-
-			++index;
-			tmp = tmp->next;
-		}
-		return (-1);
 	}
 
 };
