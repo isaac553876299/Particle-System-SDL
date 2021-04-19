@@ -12,15 +12,11 @@
 #define RELEASE(x) { delete x; x = nullptr; }
 #define RELEASE_ARRAY(x) { delete[] x; x = nullptr; }
 
-struct iVec2 { int x, y; };
-
-struct fVec2 { float x, y; };
-
 struct Particle
 {
-	int lifetime;
-	iVec2 position;
-	iVec2 velocity;
+	int lifetime, lifespan;
+	int x, y;
+	int vx, vy;
 };
 
 struct ParticleProperties
@@ -28,8 +24,8 @@ struct ParticleProperties
 	float min_lifespan, max_lifespan;
 	float min_vx, max_vx;
 	float min_vy, max_vy;
-	float gravity_x, gravity_y;
-	float min_rectx, max_rectx, min_recty, max_recty, w, h;
+	float center_x, center_y, gravity_ax, gravity_ay;
+	float min_x, max_x, min_y, max_y, w, h;
 };
 
 enum class EmitterType
@@ -47,11 +43,11 @@ class Emitter
 public:
 
 	bool active;
-	iVec2 position;
+	int center_x, center_y;
+	ParticleProperties properties;
 	int maxParticles;
 	EmitterType type;
 	Particle* particles;
-	ParticleProperties particleProperties;
 
 	Emitter()
 	{
@@ -63,50 +59,46 @@ public:
 		RELEASE_ARRAY(particles);
 	}
 
-	void Init(EmitterType _type, iVec2 _position, int _maxParticles, pugi::xml_node config)
+	void Init(EmitterType _type, int _x, int _y, int _maxParticles, pugi::xml_node config)
 	{
 		active = true;
 
 		type = _type;
-		position = _position;
+		center_x = _x;
+		center_y = _y;
 		maxParticles = _maxParticles;
 
-		particleProperties.min_lifespan = config.child("lifespan").attribute("min").as_float();
+		properties.min_lifespan = config.child("lifespan").attribute("min").as_float();
+		properties.max_lifespan = config.child("lifespan").attribute("max").as_float();
+		properties.min_vx = config.child("velocity").attribute("minX").as_float();
+		properties.max_vx = config.child("velocity").attribute("maxX").as_float();
+		properties.min_vy = config.child("velocity").attribute("minY").as_float();
+		properties.max_vy = config.child("velocity").attribute("maxY").as_float();
+		properties.center_x = config.child("gravity").attribute("x").as_float();
+		properties.center_y = config.child("gravity").attribute("y").as_float();
+		properties.gravity_ax = config.child("gravity").attribute("ax").as_float();
+		properties.gravity_ay = config.child("gravity").attribute("ay").as_float();
+		properties.min_x = config.child("draw").attribute("minX").as_float();
+		properties.max_x = config.child("draw").attribute("maxX").as_float();
+		properties.min_y = config.child("draw").attribute("minY").as_float();
+		properties.max_y = config.child("draw").attribute("maxY").as_float();
+		properties.w = config.child("draw").attribute("w").as_float();
+		properties.h = config.child("draw").attribute("h").as_float();
 
 		particles = new Particle[maxParticles];
-		for (int i = 0; i < maxParticles; i++)
-		{
-			particles[i] = addParticle();
-		}
+		for (int i = 0; i < maxParticles; i++) particles[i] = StartParticle();
 	}
 
-	Particle addParticle()
+	Particle StartParticle()
 	{
 		Particle p;
 
-		switch (type)
-		{
-		case EmitterType::SPARKLES:
-			p = { (rand() % 30) + 60,position,{((rand() % 20) - 10),((rand() % 20) - 10)} };
-			break;
-		case EmitterType::RAIN:
-			p = { (rand() % 30) + 60,{position.x + (rand() % 200) - 100,position.y},{0,(rand() % 5) + 10} };
-			break;
-		case EmitterType::SNOW:
-			p = { (rand() % 30) + 60,{position.x + (rand() % 200) - 100,position.y},{(rand() % 3) - 1,(rand() % 3) + 1} };
-			break;
-		case EmitterType::FIRE:
-
-			break;
-		case EmitterType::SMOKE:
-
-			break;
-		case EmitterType::FIREWORKS:
-
-			break;
-		default:
-			break;
-		}
+		p.lifetime = 0.0f;
+		p.lifespan = properties.min_lifespan + rand() % (int)(properties.max_lifespan - properties.min_lifespan);
+		p.x = center_x + properties.min_x + rand() % (int)(properties.max_x - properties.min_x);
+		p.y = center_y + properties.min_y + rand() % (int)(properties.max_y - properties.min_y);
+		p.vx = properties.min_vx + rand() % (int)(properties.max_vx - properties.min_vx);
+		p.vy = properties.min_vy + rand() % (int)(properties.max_vy - properties.min_vy);
 
 		return p;
 	}
@@ -115,38 +107,15 @@ public:
 	{
 		for (int i = 0; i < maxParticles; i++)
 		{
-			if (particles[i].lifetime == 0)
-				particles[i] = addParticle();
+			if (particles[i].lifetime == 0) particles[i] = StartParticle();
 
 			particles[i].lifetime--;
 
-			switch (type)
-			{
-			case EmitterType::SPARKLES:
-				particles[i].position.x += particles[i].velocity.x;
-				particles[i].position.y += particles[i].velocity.y;
-				break;
-			case EmitterType::RAIN:
-				particles[i].position.x += particles[i].velocity.x;
-				particles[i].position.y += particles[i].velocity.y;
-				break;
-			case EmitterType::SNOW:
-				particles[i].position.x += particles[i].velocity.x;
-				particles[i].position.y += particles[i].velocity.y;
-				break;
-			case EmitterType::FIRE:
-				particles[i].position.x += particles[i].velocity.x;
-				particles[i].position.y += particles[i].velocity.y;
-				break;
-			case EmitterType::SMOKE:
+			particles[i].x += particles[i].vx;
+			particles[i].y += particles[i].vy;
+			particles[i].vx += properties.gravity_ax;
+			particles[i].vy += properties.gravity_ay;
 
-				break;
-			case EmitterType::FIREWORKS:
-
-				break;
-			default:
-				break;
-			}
 		}
 	}
 
@@ -155,8 +124,8 @@ public:
 		for (int i = 0; i < maxParticles; i++)
 		{
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-			SDL_RenderDrawPoint(renderer, particles[i].position.x, particles[i].position.y);
-			SDL_Rect particleRect{ particles[i].position.x - 2, particles[i].position.y - 2,5,5 };
+			SDL_RenderDrawPoint(renderer, particles[i].x, particles[i].y);
+			SDL_Rect particleRect{ particles[i].x - 2, particles[i].y - 2,5,5 };
 			SDL_RenderDrawRect(renderer, &particleRect);
 
 			/*if (debugdraw)
@@ -172,8 +141,8 @@ public:
 		if (debugDraw)
 		{
 			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-			SDL_RenderDrawLine(renderer, position.x - 10, position.y, position.x + 10, position.y);
-			SDL_RenderDrawLine(renderer, position.x, position.y - 10, position.x, position.y + 10);
+			SDL_RenderDrawLine(renderer, center_x - 10, center_y, center_x + 10, center_y);
+			SDL_RenderDrawLine(renderer, center_x, center_y - 10, center_x, center_y + 10);
 		}
 	}
 
@@ -201,7 +170,7 @@ public:
 		RELEASE(emitters);
 	}
 
-	void AddEmitter(EmitterType t, iVec2 p, int m)
+	void AddEmitter(EmitterType t, int x, int y, int m)
 	{
 		pugi::xml_node type_config;
 		switch (t)
@@ -211,23 +180,13 @@ public:
 		case EmitterType::SNOW: type_config = particles_config.child("Snow"); break;
 		}
 		Emitter emitter;
-		emitter.Init(t, p, m, type_config);
+		emitter.Init(t, x, y, m, type_config);
 		emitters->Add(&emitter);
 	}
 
 	void Update(float dt, int* mouse, int* keyboard)
 	{
-		if (keyboard[SDL_SCANCODE_1] == 1) AddEmitter(EmitterType::SPARKLES, { mouse[0],mouse[1] }, 10);
-
-		if (keyboard[SDL_SCANCODE_2] == 1) AddEmitter(EmitterType::RAIN, { mouse[0],mouse[1] }, 10);
-
-		if (keyboard[SDL_SCANCODE_3] == 1) AddEmitter(EmitterType::SNOW, { mouse[0],mouse[1] }, 10);
-
-		if (keyboard[SDL_SCANCODE_4] == 1) AddEmitter(EmitterType::FIRE, { mouse[0],mouse[1] }, 10);
-
-		if (keyboard[SDL_SCANCODE_5] == 1) AddEmitter(EmitterType::SMOKE, { mouse[0],mouse[1] }, 10);
-
-		if (keyboard[SDL_SCANCODE_6] == 1) AddEmitter(EmitterType::FIREWORKS, { mouse[0],mouse[1] }, 10);
+		if (keyboard[SDL_SCANCODE_1] == 1) AddEmitter(EmitterType::SPARKLES, mouse[0], mouse[1], 10);
 
 		debugDraw = bool(keyboard[SDL_SCANCODE_D] == 2);
 		//if (keyboard[SDL_SCANCODE_D] == 1) debugDraw = !debugDraw;

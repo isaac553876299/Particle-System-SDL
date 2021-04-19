@@ -3,25 +3,7 @@
   <Sparkles>
     <lifespan min="60.0" max="120.0"/>
     <velocity minX="-10.0" maxX="10.0" minY="-10.0" maxY="10.0"/>
-    <gravity x="0.0" y="0.0"/>
+    <gravity center_x="0.0" center_y="0.0" ax="0.0" ay="0.0"/>
     <draw minX="0.0" maxX="0.0" minY="0.0" maxY="0.0" w="10.0" h="10.0"/>
   </Sparkles>
-  <Rain>
-    <lifespan min="60.0" max="120.0"/>
-    <velocity minX="0.0" maxX="0.0" minY="10.0" maxY="20.0"/>
-    <gravity x="0.0" y="1.0"/>
-    <draw minX="-100.0" maxX="100.0" minY="0.0" maxY="0.0" w="10.0" h="10.0"/>
-  </Rain>
-  <Snow>
-    <lifespan min="60.0" max="120.0"/>
-    <velocity minX="-1.0" maxX="1.0" minY="1.0" maxY="3.0"/>
-    <gravity x="0.0" y="1.0"/>
-    <draw minX="-100.0" maxX="100.0" minY="0.0" maxY="0.0" w="10.0" h="10.0"/>
-  </Snow>
-  <Type>
-    <lifespan min="0.0" max="0.0"/>
-    <velocity minX="0.0" maxX="0.0" minY="0.0" maxY="0.0"/>
-    <gravity x="0.0" y="0.0"/>
-    <draw minX="0.0" maxX="0.0" minY="0.0" maxY="0.0" w="0.0" h="0.0"/>
-  </Type>
 </ParticleProperties>
