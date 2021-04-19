@@ -1,13 +1,23 @@
 <?xml version="1.0"?>
 <ParticlesProperties>
   <Explosion>
-    <lifespan value="60.0" rand="0.5"/>
+    <lifespan min="60.0" max="120.0"/>
     <velocity minX="-10.0" maxX="10.0" minY="-10.0" maxY="10.0"/>
-    <gravity valueX="0.0" valueY="0.0"/>
+    <gravity x="0.0" y="0.0"/>
   </Explosion>
+  <Rain>
+    <lifespan min="60.0" max="120.0"/>
+    <velocity minX="0.0" maxX="0.0" minY="10.0" maxY="20.0"/>
+    <gravity x="0.0" y="1.0"/>
+  </Rain>
+  <Snow>
+    <lifespan min="60.0" max="120.0"/>
+    <velocity minX="-1.0" maxX="1.0" minY="1.0" maxY="3.0"/>
+    <gravity x="0.0" y="1.0"/>
+  </Snow>
   <Type>
-    <lifespan value="60.0" rand="0.5"/>
-    <velocity minX="-10.0" maxX="10.0" minY="-10.0" maxY="10.0"/>
-    <gravity valueX="0.0" valueY="0.0"/>
+    <lifespan min="0.0" max="0.0"/>
+    <velocity minX="0.0" maxX="0.0" minY="0.0" maxY="0.0"/>
+    <gravity x="0.0" y="0.0"/>
   </Type>
 </ParticlesProperties>

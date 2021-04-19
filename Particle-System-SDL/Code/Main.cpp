@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 	SDL_Init(SDL_INIT_EVERYTHING);
 	IMG_Init(IMG_INIT_PNG);
 	TTF_Init();
-	SDL_Window* window = SDL_CreateWindow("Particles Engine Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, 0);
+	SDL_Window* window = SDL_CreateWindow("Particle Engine Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, 0);
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
 	float dt;
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
 	int* mouse = (int*)calloc(4, sizeof(int));
 	int* keyboard = (int*)calloc(200, sizeof(int));
 
-	ParticleSystem* particlesEngine = new ParticleSystem(5);
+	ParticleSystem* particleSystem = new ParticleSystem;
 
 	while (active)
 	{
@@ -106,13 +106,13 @@ int main(int argc, char** argv)
 			fps, dt);
 		SDL_SetWindowTitle(window, title);
 
-		particlesEngine->Update(dt, mouse, keyboard);
+		particleSystem->Update(dt, mouse, keyboard);
 
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
-		particlesEngine->Draw(renderer);
+		particleSystem->Draw(renderer);
 
 		SDL_Texture* texture = IMG_LoadTexture(renderer, "Assets/Textures/54975857_p0.png");
 		SDL_RenderCopy(renderer, texture, 0, 0);

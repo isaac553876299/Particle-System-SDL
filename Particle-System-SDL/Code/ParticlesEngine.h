@@ -207,13 +207,12 @@ public:
 
 		debugDraw = bool(keyboard[SDL_SCANCODE_D] == 2);
 		//if (keyboard[SDL_SCANCODE_D] == 1) debugDraw = !debugDraw;
-
-		for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next) emitter->data->Update(dt);
+		if (emitters) for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next) emitter->data->Update(dt);
 	}
 
 	void Draw(SDL_Renderer* renderer)
 	{
-		for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next) emitter->data->Draw(renderer, debugDraw);
+		if (emitters) for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next) emitter->data->Draw(renderer, debugDraw);
 	}
 
 };
