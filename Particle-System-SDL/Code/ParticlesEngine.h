@@ -68,20 +68,30 @@ public:
 		center_y = _y;
 		maxParticles = _maxParticles;
 
+		switch (type)
+		{
+		case EmitterType::SPARKLES: config = config.child("Sparkles"); break;
+		case EmitterType::RAIN: config = config.child("Rain"); break;
+		case EmitterType::SNOW: config = config.child("Snow"); break;
+		case EmitterType::FIRE: config = config.child("Fire"); break;
+		case EmitterType::SMOKE: config = config.child("Smoke"); break;
+		case EmitterType::FIREWORKS: config = config.child("Fireworks"); break;
+		}
+
 		properties.min_lifespan = config.child("lifespan").attribute("min").as_float();
 		properties.max_lifespan = config.child("lifespan").attribute("max").as_float();
-		properties.min_vx = config.child("velocity").attribute("minX").as_float();
-		properties.max_vx = config.child("velocity").attribute("maxX").as_float();
-		properties.min_vy = config.child("velocity").attribute("minY").as_float();
-		properties.max_vy = config.child("velocity").attribute("maxY").as_float();
+		properties.min_vx = config.child("velocity").attribute("min_vx").as_float();
+		properties.max_vx = config.child("velocity").attribute("max_vx").as_float();
+		properties.min_vy = config.child("velocity").attribute("min_vy").as_float();
+		properties.max_vy = config.child("velocity").attribute("max_vy").as_float();
 		properties.center_x = config.child("gravity").attribute("x").as_float();
 		properties.center_y = config.child("gravity").attribute("y").as_float();
 		properties.gravity_ax = config.child("gravity").attribute("ax").as_float();
 		properties.gravity_ay = config.child("gravity").attribute("ay").as_float();
-		properties.min_x = config.child("draw").attribute("minX").as_float();
-		properties.max_x = config.child("draw").attribute("maxX").as_float();
-		properties.min_y = config.child("draw").attribute("minY").as_float();
-		properties.max_y = config.child("draw").attribute("maxY").as_float();
+		properties.min_x = config.child("draw").attribute("min_x").as_float();
+		properties.max_x = config.child("draw").attribute("max_x").as_float();
+		properties.min_y = config.child("draw").attribute("min_y").as_float();
+		properties.max_y = config.child("draw").attribute("max_y").as_float();
 		properties.w = config.child("draw").attribute("w").as_float();
 		properties.h = config.child("draw").attribute("h").as_float();
 
@@ -94,11 +104,11 @@ public:
 		Particle p;
 
 		p.lifetime = 0.0f;
-		p.lifespan = properties.min_lifespan + rand() % (int)(properties.max_lifespan - properties.min_lifespan);
-		p.x = center_x + properties.min_x + rand() % (int)(properties.max_x - properties.min_x);
-		p.y = center_y + properties.min_y + rand() % (int)(properties.max_y - properties.min_y);
-		p.vx = properties.min_vx + rand() % (int)(properties.max_vx - properties.min_vx);
-		p.vy = properties.min_vy + rand() % (int)(properties.max_vy - properties.min_vy);
+		p.lifespan = properties.min_lifespan + rand() % (int)(properties.max_lifespan - properties.min_lifespan+1);
+		p.x = center_x + properties.min_x + rand() % (int)(properties.max_x - properties.min_x+1);
+		p.y = center_y + properties.min_y + rand() % (int)(properties.max_y - properties.min_y+1);
+		p.vx = properties.min_vx + rand() % (int)(properties.max_vx - properties.min_vx+1);
+		p.vy = properties.min_vy + rand() % (int)(properties.max_vy - properties.min_vy+1);
 
 		return p;
 	}
@@ -152,17 +162,19 @@ class ParticleSystem
 {
 public:
 
-	List<Emitter*>* emitters = nullptr;
+	List<Emitter*>* emitters = new List<Emitter*>;
 
 	bool debugDraw = false;
 
 	pugi::xml_document particles_config;
+	pugi::xml_node type_config;
 
 	ParticleSystem()
 	{
 		srand(time(0));
-		pugi::xml_parse_result result = particles_config.load_file("particles_config");
+		pugi::xml_parse_result result = particles_config.load_file("particles_config.xml");
 		if (!result) printf("ERROR while loading particles_config.xml file: %s", result.description());
+		type_config = particles_config.child("ParticleProperties");
 	}
 
 	~ParticleSystem()
@@ -172,13 +184,6 @@ public:
 
 	void AddEmitter(EmitterType t, int x, int y, int m)
 	{
-		pugi::xml_node type_config;
-		switch (t)
-		{
-		case EmitterType::SPARKLES: type_config = particles_config.child("Sparkles"); break;
-		case EmitterType::RAIN: type_config = particles_config.child("Rain"); break;
-		case EmitterType::SNOW: type_config = particles_config.child("Snow"); break;
-		}
 		Emitter emitter;
 		emitter.Init(t, x, y, m, type_config);
 		emitters->Add(&emitter);
@@ -190,12 +195,25 @@ public:
 
 		debugDraw = bool(keyboard[SDL_SCANCODE_D] == 2);
 		//if (keyboard[SDL_SCANCODE_D] == 1) debugDraw = !debugDraw;
-		if (emitters) for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next) emitter->data->Update(dt);
+		if (emitters->start) for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next) emitter->data->Update(dt);
 	}
 
 	void Draw(SDL_Renderer* renderer)
 	{
-		if (emitters) for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next) emitter->data->Draw(renderer, debugDraw);
+		if (emitters->start)
+			for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next) emitter->data->Draw(renderer, debugDraw);
+	}
+
+	int CountEmitters()
+	{
+		return (emitters->start) ? emitters->size : 0;
+	}
+
+	int CountParticles()
+	{
+		int ret = 0;
+		if (emitters->start) for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next) ret += emitter->data->maxParticles;
+		return ret;
 	}
 
 };

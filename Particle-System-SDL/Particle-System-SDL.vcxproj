@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Code\External\pugi_xml\include\pugixml.cpp" />
     <ClCompile Include="Code\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
