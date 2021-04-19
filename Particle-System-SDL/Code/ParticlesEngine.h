@@ -23,6 +23,15 @@ struct Particle
 	iVec2 velocity;
 };
 
+struct ParticleProperties
+{
+	float min_lifespan, max_lifespan;
+	float min_vx, max_vx;
+	float min_vy, max_vy;
+	float gravity_x, gravity_y;
+	float min_rectx, max_rectx, min_recty, max_recty, w, h;
+};
+
 enum class EmitterType
 {
 	SPARKLES,
@@ -42,6 +51,7 @@ public:
 	int maxParticles;
 	EmitterType type;
 	Particle* particles;
+	ParticleProperties particleProperties;
 
 	Emitter()
 	{
@@ -53,13 +63,15 @@ public:
 		RELEASE_ARRAY(particles);
 	}
 
-	void Init(EmitterType _type, iVec2 _position, int _maxParticles)
+	void Init(EmitterType _type, iVec2 _position, int _maxParticles, pugi::xml_node config)
 	{
 		active = true;
 
 		type = _type;
 		position = _position;
 		maxParticles = _maxParticles;
+
+		particleProperties.min_lifespan = config.child("lifespan").attribute("min").as_float();
 
 		particles = new Particle[maxParticles];
 		for (int i = 0; i < maxParticles; i++)
@@ -171,12 +183,17 @@ class ParticleSystem
 {
 public:
 
-	List<Emitter*>* emitters;
+	List<Emitter*>* emitters = nullptr;
+
 	bool debugDraw = false;
+
+	pugi::xml_document particles_config;
 
 	ParticleSystem()
 	{
 		srand(time(0));
+		pugi::xml_parse_result result = particles_config.load_file("particles_config");
+		if (!result) printf("ERROR while loading particles_config.xml file: %s", result.description());
 	}
 
 	~ParticleSystem()
@@ -186,8 +203,15 @@ public:
 
 	void AddEmitter(EmitterType t, iVec2 p, int m)
 	{
+		pugi::xml_node type_config;
+		switch (t)
+		{
+		case EmitterType::SPARKLES: type_config = particles_config.child("Sparkles"); break;
+		case EmitterType::RAIN: type_config = particles_config.child("Rain"); break;
+		case EmitterType::SNOW: type_config = particles_config.child("Snow"); break;
+		}
 		Emitter emitter;
-		emitter.Init(t, p, m);
+		emitter.Init(t, p, m, type_config);
 		emitters->Add(&emitter);
 	}
 

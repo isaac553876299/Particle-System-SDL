@@ -56,6 +56,9 @@ int main(int argc, char** argv)
 
 	ParticleSystem* particleSystem = new ParticleSystem;
 
+	float scaleX = 1.0f;
+	float scaleY = 1.0f;
+
 	while (active)
 	{
 		if (mouse[2] == 1) mouse[2] = 2;
@@ -88,6 +91,23 @@ int main(int argc, char** argv)
 
 		int keyMap[2][4] = { 0,3,3,0,1,2,2,1 };
 		for (int i = 0; i < 200; ++i) keyboard[i] = keyMap[(int)(keys[i])][keyboard[i]];
+
+		if (keyboard[SDL_SCANCODE_R] == 1)
+		{
+			scaleX = 1.0f;
+			scaleY = 1.0f;
+		}
+		if (keyboard[SDL_SCANCODE_W] == 1)
+		{
+			scaleX += 0.1f;
+			scaleY += 0.1f;
+		}
+		if (keyboard[SDL_SCANCODE_S] == 1)
+		{
+			scaleX -= 0.1f;
+			scaleY -= 0.1f;
+		}
+		SDL_RenderSetScale(renderer, scaleX, scaleY);
 
 		dt = timer.sRead();
 		timer.Start();
