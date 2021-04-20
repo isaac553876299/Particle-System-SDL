@@ -10,6 +10,7 @@ The term particle system, an incredibly common and useful technique in computer 
 >
 >“A particle system is a collection of many many minute particles that together represent a fuzzy object. Over a period of time, particles are generated into a system, move and change from within the system, and die from the system.” —William Reeves, "Particle Systems—A Technique for Modeling a Class of Fuzzy Objects," ACM Transactions on Graphics 2:2 (April 1983), 92.
 >
+
 Since the early 1980s, particle systems have been used in countless video games, animations, digital art pieces, and installations to model various irregular types of natural phenomena, such as fire, smoke, waterfalls, fog, grass, bubbles, and so on. A particle system is made after the recreation of an environment filled with entities *whose behaviour can be imprinted* into rather small particles which are bound to the system properties. In the end, they serve as a method to **simulate** either natural or fictional **phenomena** which would otherwise be harder **to study, observe or interact with**.
 
 ## Why
@@ -21,11 +22,11 @@ Lets get into some examples. Lately, Pixar has added the use of high level CGI a
 
 Another example simulating a collision of minecraft blocks if they were made of particles, this time using advanced physics equations to make it realistic.
 
-https://user-images.githubusercontent.com/60979696/115390034-1611a980-a1de-11eb-9bb1-15ff91afad3e.mp4
+[video](https://user-images.githubusercontent.com/60979696/115390034-1611a980-a1de-11eb-9bb1-15ff91afad3e.mp4)
 
 More reasons to use particle system:
 
-https://user-images.githubusercontent.com/60979696/115391889-42c6c080-a1e0-11eb-8ab1-682e35c220f1.mp4
+[video](https://user-images.githubusercontent.com/60979696/115391889-42c6c080-a1e0-11eb-8ab1-682e35c220f1.mp4)
 
 This is why we use particle systems, draw this by hand...
 
