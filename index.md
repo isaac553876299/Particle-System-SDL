@@ -35,7 +35,9 @@ More reasons to use particle system:
 
 https://user-images.githubusercontent.com/60979696/115391889-42c6c080-a1e0-11eb-8ab1-682e35c220f1.mp4
 
-<img src="https://user-images.githubusercontent.com/60979696/115391902-465a4780-a1e0-11eb-8ea0-a08597b7907e.gif" width="500" height="209" />
+This is why we use particle systems, draw this by hand...
+
+<img src="https://user-images.githubusercontent.com/60979696/115391902-465a4780-a1e0-11eb-8ea0-a08597b7907e.gif" width="1000" height="418"/>
 
 It must be stated that for our concerns, most non-realistic videogames, and so using little simple physics, do not require such complex particle systems. As an example, our own game does not have physics implemented at all, and so, we will take into account that we can and **should** make use of simpler equations when constructing a particle system. If the purpose of the system is to simulate a realistic environment, then go for it. But it must be decided whether we just need some fancy animations or effects in our videogame in order to choose the proper configuration for our system.
 
