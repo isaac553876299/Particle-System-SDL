@@ -1,7 +1,5 @@
 # Particle System SDL2
 
-[RELEASE](/isaac553876299/Particle-System-SDL/releases/latest/download/Particle-System-SDL.zip)
-
 ## What
 What is a particle system?
 In 1982, William T. Reeves, a researcher at Lucasfilm Ltd., was working on the film Star Trek II: The Wrath of Khan. Much of the movie revolves around the Genesis Device, a torpedo that when shot at a barren, lifeless planet has the ability to reorganize matter and create a habitable world for colonization. During the sequence, a wall of fire ripples over the planet while it is being “terraformed".
@@ -11,7 +9,7 @@ https://user-images.githubusercontent.com/60979696/115384075-e1e6ba80-a1d6-11eb-
 The term particle system, an incredibly common and useful technique in computer graphics, was coined in the creation of this particular effect.
 
 >“A particle system is a collection of many many minute particles that together represent a fuzzy object. Over a period of time, particles are generated into a system, move and change from within the system, and die from the system.” —William Reeves, "Particle Systems—A Technique for Modeling a Class of Fuzzy Objects," ACM Transactions on Graphics 2:2 (April 1983), 92.
->
+<
 
 Since the early 1980s, particle systems have been used in countless video games, animations, digital art pieces, and installations to model various irregular types of natural phenomena, such as fire, smoke, waterfalls, fog, grass, bubbles, and so on. A particle system is made after the recreation of an environment filled with entities *whose behaviour can be imprinted* into rather small particles which are bound to the system properties. In the end, they serve as a method to **simulate** either natural or fictional **phenomena** which would otherwise be harder **to study, observe or interact with**.
 
