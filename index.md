@@ -4,7 +4,7 @@
 What is a particle system?
 In 1982, William T. Reeves, a researcher at Lucasfilm Ltd., was working on the film Star Trek II: The Wrath of Khan. Much of the movie revolves around the Genesis Device, a torpedo that when shot at a barren, lifeless planet has the ability to reorganize matter and create a habitable world for colonization. During the sequence, a wall of fire ripples over the planet while it is being “terraformed".
 
-https://user-images.githubusercontent.com/60979696/115384075-e1e6ba80-a1d6-11eb-96fd-0c8ea9353e33.mp4
+[video](https://user-images.githubusercontent.com/60979696/115384075-e1e6ba80-a1d6-11eb-96fd-0c8ea9353e33.mp4)
 
 The term particle system, an incredibly common and useful technique in computer graphics, was coined in the creation of this particular effect.
 
