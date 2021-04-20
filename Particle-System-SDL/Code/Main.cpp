@@ -8,6 +8,9 @@
 
 #include "ParticlesEngine.h"
 
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
+
 #define RELEASE(x) { delete x; x = nullptr; }
 #define RELEASE_ARRAY(x) { delete[] x; x = nullptr; }
 
@@ -40,12 +43,16 @@ int main(int argc, char** argv)
 	SDL_Init(SDL_INIT_EVERYTHING);
 	IMG_Init(IMG_INIT_PNG);
 	TTF_Init();
-	SDL_Window* window = SDL_CreateWindow("Particle Engine Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, 0);
+	SDL_Window* window = SDL_CreateWindow("Particle Engine Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
 	float scale = 1.0f;
 	float camerax = 0.0f;
 	float cameray = 0.0f;
+	float offsetx = 0.0f;
+	float offsety = 0.0f;
+	float camoffx = 0.0f;
+	float camoffy = 0.0f;
 
 	float dt;
 	Timer timer;
@@ -75,11 +82,6 @@ int main(int argc, char** argv)
 			fps = fpsCount;
 			fpsCount = 0;
 		}
-
-		static char title[256];
-		sprintf_s(title, 256, " | fps: %d | dt: %.3f | ",
-			fps, dt);
-		SDL_SetWindowTitle(window, title);
 
 		if (mouse[2] == 1) mouse[2] = 2;
 		if (mouse[3] == 1) mouse[3] = 2;
@@ -119,12 +121,16 @@ int main(int argc, char** argv)
 
 		if (keyboard[SDL_SCANCODE_R] == 1) scale = 1.0f;
 		SDL_RenderSetScale(renderer, scale, scale);
-		if (mouse[3] == 2)
+
+		if (mouse[2] == 1)
 		{
-			camerax += (mouse[0] - camerax) * dt;
-			cameray += (mouse[1] - cameray) * dt;
-			SDL_Rect viewport{ camerax-640,cameray-360,1280,720 };
-			SDL_RenderSetViewport(renderer, &viewport);
+			offsetx = mouse[0] - camerax;
+			offsety = mouse[1] - cameray;
+		}
+		if (mouse[2] == 2)
+		{
+			camerax = mouse[0] - offsetx;
+			cameray = mouse[1] - offsety;
 		}
 
 		particleSystem->Update(dt, mouse, keyboard);
@@ -133,11 +139,20 @@ int main(int argc, char** argv)
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
-		static char debug[256];
-		sprintf_s(debug, 256, "Number of emitters: %d", particleSystem->CountEmitters());
-		DrawFont(renderer, font, { 255,0,0,255 }, 20, 10, 0.5f, debug);
-		sprintf_s(debug, 256, "Number of particles: %d", particleSystem->CountParticles());
-		DrawFont(renderer, font, { 255,0,0,255 }, 20, 50, 0.5f, debug);
+		const unsigned int size = 512;
+		static char debug[size];
+		sprintf_s(debug, size, "FPS: %d", fps);
+		DrawFont(renderer, font, { 255,0,0,255 }, camerax + 20, cameray + 10, 0.5f, debug);
+		sprintf_s(debug, size, "dt: %.3f", dt);
+		DrawFont(renderer, font, { 255,0,0,255 }, camerax + 20, cameray + 50, 0.5f, debug);
+		sprintf_s(debug, size, "Scale: %.1f", scale);
+		DrawFont(renderer, font, { 255,0,0,255 }, camerax + 20, cameray + 90, 0.5f, debug);
+		sprintf_s(debug, size, "Camera: x %.f y %.f", camerax, cameray);
+		DrawFont(renderer, font, { 255,0,0,255 }, camerax + 20, cameray + 130, 0.5f, debug);
+		sprintf_s(debug, size, "Number of emitters: %d", particleSystem->emitters_count);
+		DrawFont(renderer, font, { 255,0,0,255 }, camerax + 20, cameray + 170, 0.5f, debug);
+		sprintf_s(debug, size, "Number of particles: %d", particleSystem->particles_count);
+		DrawFont(renderer, font, { 255,0,0,255 }, camerax + 20, cameray + 210, 0.5f, debug);
 
 		particleSystem->Draw(renderer);
 

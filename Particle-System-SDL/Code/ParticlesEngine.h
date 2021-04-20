@@ -96,7 +96,8 @@ public:
 		properties.h = config.child("draw").attribute("h").as_float();
 
 		particles = new Particle[maxParticles];
-		for (int i = 0; i < maxParticles; i++) particles[i] = StartParticle();
+		for (int i = 0; i < maxParticles; ++i)
+			particles[i] = StartParticle();
 	}
 
 	Particle StartParticle()
@@ -104,22 +105,22 @@ public:
 		Particle p;
 
 		p.lifetime = 0.0f;
-		p.lifespan = properties.min_lifespan + rand() % (int)(properties.max_lifespan - properties.min_lifespan+1);
-		p.x = center_x + properties.min_x + rand() % (int)(properties.max_x - properties.min_x+1);
-		p.y = center_y + properties.min_y + rand() % (int)(properties.max_y - properties.min_y+1);
-		p.vx = properties.min_vx + rand() % (int)(properties.max_vx - properties.min_vx+1);
-		p.vy = properties.min_vy + rand() % (int)(properties.max_vy - properties.min_vy+1);
+		p.lifespan = properties.min_lifespan + rand() % (int)(1 + properties.max_lifespan - properties.min_lifespan);
+		p.x = center_x + properties.min_x + rand() % (int)(1 + properties.max_x - properties.min_x);
+		p.y = center_y + properties.min_y + rand() % (int)(1 + properties.max_y - properties.min_y);
+		p.vx = properties.min_vx + rand() % (int)(1 + properties.max_vx - properties.min_vx);
+		p.vy = properties.min_vy + rand() % (int)(1 + properties.max_vy - properties.min_vy);
 
 		return p;
 	}
 
 	void Update(float dt)
 	{
-		for (int i = 0; i < maxParticles; i++)
+		for (int i = 0; i < maxParticles; ++i)
 		{
 			if (particles[i].lifetime == 0) particles[i] = StartParticle();
 
-			particles[i].lifetime--;
+			--particles[i].lifetime;
 
 			particles[i].x += particles[i].vx;
 			particles[i].y += particles[i].vy;
@@ -131,7 +132,7 @@ public:
 
 	void Draw(SDL_Renderer* renderer, bool debugDraw)
 	{
-		for (int i = 0; i < maxParticles; i++)
+		for (int i = 0; i < maxParticles; ++i)
 		{
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			SDL_RenderDrawPoint(renderer, particles[i].x, particles[i].y);
@@ -169,6 +170,9 @@ public:
 	pugi::xml_document particles_config;
 	pugi::xml_node type_config;
 
+	unsigned int emitters_count = 0;
+	unsigned int particles_count = 0;
+
 	ParticleSystem()
 	{
 		srand(time(0));
@@ -182,38 +186,31 @@ public:
 		RELEASE(emitters);
 	}
 
-	void AddEmitter(EmitterType t, int x, int y, int m)
+	void AddEmitter(EmitterType type, int x, int y, int maxp)
 	{
 		Emitter emitter;
-		emitter.Init(t, x, y, m, type_config);
+		emitter.Init(type, x, y, maxp, type_config);
 		emitters->Add(&emitter);
+		++emitters_count;
+		particles_count += maxp;
 	}
 
 	void Update(float dt, int* mouse, int* keyboard)
 	{
 		if (keyboard[SDL_SCANCODE_1] == 1) AddEmitter(EmitterType::SPARKLES, mouse[0], mouse[1], 10);
 
-		debugDraw = bool(keyboard[SDL_SCANCODE_D] == 2);
-		//if (keyboard[SDL_SCANCODE_D] == 1) debugDraw = !debugDraw;
-		if (emitters->start) for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next) emitter->data->Update(dt);
+		//debugDraw = bool(keyboard[SDL_SCANCODE_D] == 2);
+		if (keyboard[SDL_SCANCODE_D] == 1) debugDraw = !debugDraw;
+		if (emitters->start)
+			for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next)
+				emitter->data->Update(dt);
 	}
 
 	void Draw(SDL_Renderer* renderer)
 	{
 		if (emitters->start)
-			for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next) emitter->data->Draw(renderer, debugDraw);
-	}
-
-	int CountEmitters()
-	{
-		return (emitters->start) ? emitters->size : 0;
-	}
-
-	int CountParticles()
-	{
-		int ret = 0;
-		if (emitters->start) for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next) ret += emitter->data->maxParticles;
-		return ret;
+			for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next)
+				emitter->data->Draw(renderer, debugDraw);
 	}
 
 };
