@@ -7,7 +7,7 @@ In 1982, William T. Reeves, a researcher at Lucasfilm Ltd., was working on the f
 https://user-images.githubusercontent.com/60979696/115384075-e1e6ba80-a1d6-11eb-96fd-0c8ea9353e33.mp4
 
 The term particle system, an incredibly common and useful technique in computer graphics, was coined in the creation of this particular effect.
->
+
 >“A particle system is a collection of many many minute particles that together represent a fuzzy object. Over a period of time, particles are generated into a system, move and change from within the system, and die from the system.” —William Reeves, "Particle Systems—A Technique for Modeling a Class of Fuzzy Objects," ACM Transactions on Graphics 2:2 (April 1983), 92.
 >
 
