@@ -1,39 +1,43 @@
 <?xml version="1.0"?>
 <ParticleProperties>
   <Sparkles>
+    <emitter amount="100"/>
     <lifespan min="60.0f" max="120.0f"/>
     <velocity min_vx="-10.0" max_vx="10.0" min_vy="-10.0" max_vy="10.0"/>
-    <gravity center_x="0.0" center_y="0.0" ax="0.0" ay="0.0"/>
-    <draw min_x="0.0" max_x="0.0" min_y="0.0" max_y="0.0" w="10.0" h="10.0"/>
+    <gravity center_x="0.0" center_y="500.0" ax="0.1" ay="0.2"/>
+    <position min_x="0.0" max_x="0.0" min_y="0.0" max_y="0.0"/>
+    <draw min_w="5.0" max_w="10.0" min_h="5.0" max_h="10.0"/>
   </Sparkles>
   <Rain>
+    <emitter amount="100"/>
     <lifespan min="60.0f" max="120.0f"/>
     <velocity min_vx="-1.0" max_vx="1.0" min_vy="10.0" max_vy="20.0"/>
     <gravity center_x="0.0" center_y="0.0" ax="0.0" ay="0.0"/>
-    <draw min_x="-100.0" max_x="100.0" min_y="0.0" max_y="0.0" w="1.0" h="10.0"/>
+    <position min_x="-100.0" max_x="100.0" min_y="-50.0" max_y="50.0"/>
+    <draw min_w="1.0" max_w="2.0" min_h="10.0" max_h="15.0"/>
   </Rain>
   <Snow>
+    <emitter amount="100"/>
     <lifespan min="60.0f" max="180.0f"/>
-    <velocity min_vx="-1.0" max_vx="1.0" min_vy="1.0" max_vy="5.0"/>
+    <velocity min_vx="-2.0" max_vx="2.0" min_vy="2.0" max_vy="3.0"/>
     <gravity center_x="0.0" center_y="0.0" ax="0.0" ay="0.0"/>
-    <draw min_x="-100.0" max_x="100.0" min_y="0.0" max_y="0.0" w="10.0" h="10.0"/>
+    <position min_x="-100.0" max_x="100.0" min_y="-50.0" max_y="50.0"/>
+    <draw min_w="20.0" max_w="30.0" min_h="20.0" max_h="30.0" texture="Assets/Textures/snowflake.png"/>
   </Snow>
   <Fire>
-    <lifespan min="60.0f" max="180.0f"/>
-    <velocity min_vx="-5.0" max_vx="5.0" min_vy="-5.0" max_vy="5.0"/>
-    <gravity center_x="0.0" center_y="-100.0" ax="0.0" ay="-0.1"/>
-    <draw min_x="0.0" max_x="0.0" min_y="0.0" max_y="0.0" w="10.0" h="10.0"/>
+    <emitter amount="200"/>
+    <lifespan min="60.0f" max="120.0f"/>
+    <velocity min_vx="-10.0" max_vx="10.0" min_vy="-2.0" max_vy="2.0"/>
+    <gravity center_x="0.0" center_y="-500.0" ax="0.3" ay="0.3"/>
+    <position min_x="-5.0" max_x="5.0" min_y="-5.0" max_y="5.0"/>
+    <draw min_w="100.0" max_w="110.0" min_h="100.0" max_h="110.0" texture="Assets/Textures/fire.png"/>
   </Fire>
   <Smoke>
+    <emitter amount="200"/>
     <lifespan min="60.0f" max="120.0f"/>
     <velocity min_vx="-1.0" max_vx="1.0" min_vy="-1.0" max_vy="1.0"/>
-    <gravity center_x="0.0" center_y="-200.0" ax="0.0" ay="-1.0"/>
-    <draw min_x="0.0" max_x="0.0" min_y="0.0" max_y="0.0" w="10.0" h="10.0"/>
+    <gravity center_x="200.0" center_y="-300.0" ax="0.1" ay="0.1"/>
+    <position min_x="-5.0" max_x="5.0" min_y="-5.0" max_y="5.0"/>
+    <draw min_w="40.0" max_w="50.0" min_h="40.0" max_h="50.0" texture="Assets/Textures/smoke.png"/>
   </Smoke>
-  <Fireworks>
-    <lifespan min="60.0f" max="120.0f"/>
-    <velocity min_vx="-10.0" max_vx="10.0" min_vy="-10.0" max_vy="10.0"/>
-    <gravity center_x="0.0" center_y="0.0" ax="0.0" ay="0.0"/>
-    <draw min_x="0.0" max_x="0.0" min_y="0.0" max_y="0.0" w="10.0" h="10.0"/>
-  </Fireworks>
 </ParticleProperties>

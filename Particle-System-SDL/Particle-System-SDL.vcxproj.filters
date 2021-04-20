@@ -23,9 +23,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Code\Animation.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Code\List.h">
       <Filter>Source Files</Filter>
     </ClInclude>

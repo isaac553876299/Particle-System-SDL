@@ -61,11 +61,9 @@ int main(int argc, char** argv)
 	int* mouse = (int*)calloc(4, sizeof(int));
 	int* keyboard = (int*)calloc(200, sizeof(int));
 
-	ParticleSystem* particleSystem = new ParticleSystem;
+	ParticleSystem* particleSystem = new ParticleSystem(renderer);
 
 	TTF_Font* font = TTF_OpenFont("Assets/Fonts/Kurale-Regular.ttf", 72);
-
-
 
 	while (active)
 	{
@@ -133,11 +131,10 @@ int main(int argc, char** argv)
 
 		particleSystem->Update(dt, mouse, keyboard, scale);
 
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
-		particleSystem->Draw(renderer, camerax, cameray);
+		particleSystem->Draw(camerax, cameray);
 
 		const unsigned int size = 512;
 		static char debug[size];
