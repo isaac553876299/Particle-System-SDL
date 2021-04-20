@@ -204,14 +204,14 @@ public:
 		particles_count += maxp;
 	}
 
-	void Update(float dt, int* mouse, int* keyboard)
+	void Update(float dt, int* mouse, int* keyboard, float scale)
 	{
-		if (keyboard[SDL_SCANCODE_1] == 1) AddEmitter(EmitterType::SPARKLES, mouse[0], mouse[1], 10);
-		if (keyboard[SDL_SCANCODE_2] == 1) AddEmitter(EmitterType::RAIN, mouse[0], mouse[1], 100);
-		if (keyboard[SDL_SCANCODE_3] == 1) AddEmitter(EmitterType::SNOW, mouse[0], mouse[1], 10);
-		if (keyboard[SDL_SCANCODE_4] == 1) AddEmitter(EmitterType::FIRE, mouse[0], mouse[1], 10);
-		if (keyboard[SDL_SCANCODE_5] == 1) AddEmitter(EmitterType::SMOKE, mouse[0], mouse[1], 10);
-		if (keyboard[SDL_SCANCODE_6] == 1) AddEmitter(EmitterType::FIREWORKS, mouse[0], mouse[1], 10);
+		if (keyboard[SDL_SCANCODE_1] == 1) AddEmitter(EmitterType::SPARKLES, mouse[0] / scale, mouse[1] / scale, 100);
+		if (keyboard[SDL_SCANCODE_2] == 1) AddEmitter(EmitterType::RAIN, mouse[0] / scale, mouse[1] / scale, 100);
+		if (keyboard[SDL_SCANCODE_3] == 1) AddEmitter(EmitterType::SNOW, mouse[0] / scale, mouse[1] / scale, 100);
+		if (keyboard[SDL_SCANCODE_4] == 1) AddEmitter(EmitterType::FIRE, mouse[0] / scale, mouse[1] / scale, 100);
+		if (keyboard[SDL_SCANCODE_5] == 1) AddEmitter(EmitterType::SMOKE, mouse[0] / scale, mouse[1] / scale, 100);
+		if (keyboard[SDL_SCANCODE_6] == 1) AddEmitter(EmitterType::FIREWORKS, mouse[0] / scale, mouse[1] / scale, 100);
 
 		if (keyboard[SDL_SCANCODE_D] == 1) debugDraw = !debugDraw;
 		if (emitters->start)
