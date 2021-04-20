@@ -23,11 +23,11 @@ struct Timer
 	float sRead() { return float((SDL_GetTicks() - time) / 1000.f); };
 };
 
-void DrawFont(SDL_Renderer* renderer, TTF_Font* font, SDL_Color color, int x, int y, float s, const char* text)
+void DrawFont(SDL_Renderer* renderer, TTF_Font* font, SDL_Color color, float camerax, float cameray, int x, int y, float s, const char* text)
 {
 	SDL_Surface* textSurface = TTF_RenderText_Solid(font, text, color);//TTF_RenderText_Shaded
 	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-	SDL_Rect rect{ x,y,0,0 };
+	SDL_Rect rect{ x + camerax,y + cameray,0,0 };
 	SDL_QueryTexture(textTexture, 0, 0, &rect.w, &rect.h);
 	rect.w *= s;
 	rect.h *= s;
@@ -51,8 +51,6 @@ int main(int argc, char** argv)
 	float cameray = 0.0f;
 	float offsetx = 0.0f;
 	float offsety = 0.0f;
-	float camoffx = 0.0f;
-	float camoffy = 0.0f;
 
 	float dt;
 	Timer timer;
@@ -139,22 +137,22 @@ int main(int argc, char** argv)
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
+		particleSystem->Draw(renderer, camerax, cameray);
+
 		const unsigned int size = 512;
 		static char debug[size];
 		sprintf_s(debug, size, "FPS: %d", fps);
-		DrawFont(renderer, font, { 255,0,0,255 }, camerax + 20, cameray + 10, 0.5f, debug);
+		DrawFont(renderer, font, { 255,0,0,255 }, 0, 0, 20, 10, 0.5f, debug);
 		sprintf_s(debug, size, "dt: %.3f", dt);
-		DrawFont(renderer, font, { 255,0,0,255 }, camerax + 20, cameray + 50, 0.5f, debug);
+		DrawFont(renderer, font, { 255,0,0,255 }, 0, 0, 20, 50, 0.5f, debug);
 		sprintf_s(debug, size, "Scale: %.1f", scale);
-		DrawFont(renderer, font, { 255,0,0,255 }, camerax + 20, cameray + 90, 0.5f, debug);
+		DrawFont(renderer, font, { 255,0,0,255 }, 0, 0, 20, 90, 0.5f, debug);
 		sprintf_s(debug, size, "Camera: x %.f y %.f", camerax, cameray);
-		DrawFont(renderer, font, { 255,0,0,255 }, camerax + 20, cameray + 130, 0.5f, debug);
+		DrawFont(renderer, font, { 255,0,0,255 }, 0, 0, 20, 130, 0.5f, debug);
 		sprintf_s(debug, size, "Number of emitters: %d", particleSystem->emitters_count);
-		DrawFont(renderer, font, { 255,0,0,255 }, camerax + 20, cameray + 170, 0.5f, debug);
+		DrawFont(renderer, font, { 255,0,0,255 }, 0, 0, 20, 170, 0.5f, debug);
 		sprintf_s(debug, size, "Number of particles: %d", particleSystem->particles_count);
-		DrawFont(renderer, font, { 255,0,0,255 }, camerax + 20, cameray + 210, 0.5f, debug);
-
-		particleSystem->Draw(renderer);
+		DrawFont(renderer, font, { 255,0,0,255 }, 0, 0, 20, 210, 0.5f, debug);
 
 		SDL_RenderPresent(renderer);
 	}

@@ -6,4 +6,34 @@
     <gravity center_x="0.0" center_y="0.0" ax="0.0" ay="0.0"/>
     <draw min_x="0.0" max_x="0.0" min_y="0.0" max_y="0.0" w="10.0" h="10.0"/>
   </Sparkles>
+  <Rain>
+    <lifespan min="60.0f" max="120.0f"/>
+    <velocity min_vx="-1.0" max_vx="1.0" min_vy="10.0" max_vy="20.0"/>
+    <gravity center_x="0.0" center_y="0.0" ax="0.0" ay="0.0"/>
+    <draw min_x="-100.0" max_x="100.0" min_y="0.0" max_y="0.0" w="1.0" h="10.0"/>
+  </Rain>
+  <Snow>
+    <lifespan min="60.0f" max="180.0f"/>
+    <velocity min_vx="-1.0" max_vx="1.0" min_vy="1.0" max_vy="5.0"/>
+    <gravity center_x="0.0" center_y="0.0" ax="0.0" ay="0.0"/>
+    <draw min_x="-100.0" max_x="100.0" min_y="0.0" max_y="0.0" w="10.0" h="10.0"/>
+  </Snow>
+  <Fire>
+    <lifespan min="60.0f" max="180.0f"/>
+    <velocity min_vx="-5.0" max_vx="5.0" min_vy="-5.0" max_vy="5.0"/>
+    <gravity center_x="0.0" center_y="-100.0" ax="0.0" ay="-0.1"/>
+    <draw min_x="0.0" max_x="0.0" min_y="0.0" max_y="0.0" w="10.0" h="10.0"/>
+  </Fire>
+  <Smoke>
+    <lifespan min="60.0f" max="120.0f"/>
+    <velocity min_vx="-1.0" max_vx="1.0" min_vy="-1.0" max_vy="1.0"/>
+    <gravity center_x="0.0" center_y="-200.0" ax="0.0" ay="-1.0"/>
+    <draw min_x="0.0" max_x="0.0" min_y="0.0" max_y="0.0" w="10.0" h="10.0"/>
+  </Smoke>
+  <Fireworks>
+    <lifespan min="60.0f" max="120.0f"/>
+    <velocity min_vx="-10.0" max_vx="10.0" min_vy="-10.0" max_vy="10.0"/>
+    <gravity center_x="0.0" center_y="0.0" ax="0.0" ay="0.0"/>
+    <draw min_x="0.0" max_x="0.0" min_y="0.0" max_y="0.0" w="10.0" h="10.0"/>
+  </Fireworks>
 </ParticleProperties>

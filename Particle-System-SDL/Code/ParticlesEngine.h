@@ -14,9 +14,9 @@
 
 struct Particle
 {
-	int lifetime, lifespan;
-	int x, y;
-	int vx, vy;
+	float lifetime, lifespan;
+	float x, y;
+	float vx, vy;
 };
 
 struct ParticleProperties
@@ -118,7 +118,18 @@ public:
 	{
 		for (int i = 0; i < maxParticles; ++i)
 		{
-			if (particles[i].lifetime >= particles[i].lifespan) particles[i] = StartParticle();
+			if (particles[i].lifetime >= particles[i].lifespan)
+			{
+				switch (type)
+				{
+				case EmitterType::FIREWORKS:
+
+					break;
+				default:
+					particles[i] = StartParticle();
+					break;
+				}
+			}
 
 			++particles[i].lifetime;
 
@@ -130,30 +141,28 @@ public:
 		}
 	}
 
-	void Draw(SDL_Renderer* renderer, bool debugDraw)
+	void Draw(SDL_Renderer* renderer, float camerax, float cameray, bool debugDraw)
 	{
 		for (int i = 0; i < maxParticles; ++i)
 		{
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-			SDL_RenderDrawPoint(renderer, particles[i].x, particles[i].y);
-			SDL_Rect particleRect{ particles[i].x - 2, particles[i].y - 2,5,5 };
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255 * (1 - (particles[i].lifetime / particles[i].lifespan)));
+			SDL_RenderDrawPoint(renderer, camerax + particles[i].x, cameray + particles[i].y);
+			SDL_Rect particleRect{ camerax + particles[i].x - properties.w / 2, cameray + particles[i].y - properties.h / 2, properties.w, properties.h };
 			SDL_RenderDrawRect(renderer, &particleRect);
+			SDL_RenderFillRect(renderer, &particleRect);
 
 			if (debugDraw)
 			{
 				SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-				SDL_RenderDrawLine(renderer, particles[i].x, particles[i].y, particles[i].x + particles[i].vx * 10, particles[i].vy + particles[i].vy * 10);
+				SDL_RenderDrawLine(renderer, camerax + particles[i].x, cameray + particles[i].y, camerax + particles[i].x + particles[i].vx * 10, cameray + particles[i].y + particles[i].vy * 10);
 				SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-				SDL_Rect r2{ particles[i].x - particles[i].lifetime / 2,particles[i].y - particles[i].lifetime / 2,particles[i].lifetime,particles[i].lifetime };
-				SDL_RenderDrawRect(renderer, &r2);
-
 			}
 		}
 		if (debugDraw)
 		{
-			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-			SDL_RenderDrawLine(renderer, center_x - 10, center_y, center_x + 10, center_y);
-			SDL_RenderDrawLine(renderer, center_x, center_y - 10, center_x, center_y + 10);
+			SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+			SDL_RenderDrawLine(renderer, camerax + center_x - 10, cameray + center_y, camerax + center_x + 10, cameray + center_y);
+			SDL_RenderDrawLine(renderer, camerax + center_x, cameray + center_y - 10, camerax + center_x, cameray + center_y + 10);
 		}
 	}
 
@@ -198,19 +207,23 @@ public:
 	void Update(float dt, int* mouse, int* keyboard)
 	{
 		if (keyboard[SDL_SCANCODE_1] == 1) AddEmitter(EmitterType::SPARKLES, mouse[0], mouse[1], 10);
+		if (keyboard[SDL_SCANCODE_2] == 1) AddEmitter(EmitterType::RAIN, mouse[0], mouse[1], 100);
+		if (keyboard[SDL_SCANCODE_3] == 1) AddEmitter(EmitterType::SNOW, mouse[0], mouse[1], 10);
+		if (keyboard[SDL_SCANCODE_4] == 1) AddEmitter(EmitterType::FIRE, mouse[0], mouse[1], 10);
+		if (keyboard[SDL_SCANCODE_5] == 1) AddEmitter(EmitterType::SMOKE, mouse[0], mouse[1], 10);
+		if (keyboard[SDL_SCANCODE_6] == 1) AddEmitter(EmitterType::FIREWORKS, mouse[0], mouse[1], 10);
 
-		//debugDraw = bool(keyboard[SDL_SCANCODE_D] == 2);
 		if (keyboard[SDL_SCANCODE_D] == 1) debugDraw = !debugDraw;
 		if (emitters->start)
 			for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next)
 				emitter->data->Update(dt);
 	}
 
-	void Draw(SDL_Renderer* renderer)
+	void Draw(SDL_Renderer* renderer, float camerax, float cameray)
 	{
 		if (emitters->start)
 			for (ListItem<Emitter*>* emitter = emitters->start; emitter; emitter = emitter->next)
-				emitter->data->Draw(renderer, debugDraw);
+				emitter->data->Draw(renderer, camerax, cameray, debugDraw);
 	}
 
 };
