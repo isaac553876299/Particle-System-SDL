@@ -1,13 +1,5 @@
 # Particle System SDL2
 
-https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-particle-systems/a/intro-to-particle-systems
-
-https://web.cs.wpi.edu/~matt/courses/cs563/talks/psys.html
-
-https://cesium.com/docs/tutorials/particle-systems/
-
-https://natureofcode.com/book/chapter-4-particle-systems/
-
 ## What
 What is a particle system?
 In 1982, William T. Reeves, a researcher at Lucasfilm Ltd., was working on the film Star Trek II: The Wrath of Khan. Much of the movie revolves around the Genesis Device, a torpedo that when shot at a barren, lifeless planet has the ability to reorganize matter and create a habitable world for colonization. During the sequence, a wall of fire ripples over the planet while it is being “terraformed".
@@ -181,8 +173,25 @@ public:
 };
 ```
 
-Time to talk about random values. go itro 2
+Time to talk about random values. What defines a particle system from other "systems" is its rather somewhat random generation of particles or selection of values. Mostly useful because it makes for a more realistic output. To implement this randomness, particle properties in the config xml file include minimum(`min`) and maximum(`max`) values to be given to certain properties such as inital velocity or spawn position with respect to the emitter's center.
+Since we are using float values adn to avoid complicated code, c++ library `time.h` comes in handy as for using its rand()% function, which given an int returns some pseudo-random value between 0 and that int, and so we can take advantage of this to construct some random generator given our parameters:
+`p.vx = properties.min_vx + rand() % (int)(1 + properties.max_vx - properties.min_vx);`
+*The `1 + ` is to avoid impossible operation in case max - min = 0*
 
+One last word is to pay attention to drawing methods. Since each particle has a lifetime which is capped at its lifespan, we can use this values to generate the alpha mod for either textures or normal rectangles and so we can draw the result with the respective amount of transparency that its lifetime represents.
+`unsigned int alpha = 255 * (1 - (particles[i].lifetime / particles[i].lifespan));`
 
 Now go pupils and do your thing!
 <img src="https://user-images.githubusercontent.com/60979696/115391907-478b7480-a1e0-11eb-83c6-0775d6cdc178.gif" width="920" height="516" />
+
+For detailed information and advanced c++ learning visit:
+
+[khanacademy.org](https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-particle-systems/a/intro-to-particle-systems)
+
+[web.cs.wpi.edu](https://web.cs.wpi.edu/~matt/courses/cs563/talks/psys.html)
+
+[cesium.com](https://cesium.com/docs/tutorials/particle-systems/)
+
+>this one is specially recommended!
+>
+[natureofcode.com](https://natureofcode.com/book/chapter-4-particle-systems/)
