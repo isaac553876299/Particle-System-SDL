@@ -45,7 +45,7 @@ public:
 	bool active;
 	int center_x, center_y;
 	ParticleProperties properties;
-	int maxParticles;
+	int maxParticles = 0;
 	EmitterType type;
 	Particle* particles;
 
@@ -118,9 +118,9 @@ public:
 	{
 		for (int i = 0; i < maxParticles; ++i)
 		{
-			if (particles[i].lifetime == 0) particles[i] = StartParticle();
+			if (particles[i].lifetime >= particles[i].lifespan) particles[i] = StartParticle();
 
-			--particles[i].lifetime;
+			++particles[i].lifetime;
 
 			particles[i].x += particles[i].vx;
 			particles[i].y += particles[i].vy;
@@ -139,15 +139,15 @@ public:
 			SDL_Rect particleRect{ particles[i].x - 2, particles[i].y - 2,5,5 };
 			SDL_RenderDrawRect(renderer, &particleRect);
 
-			/*if (debugdraw)
+			if (debugDraw)
 			{
 				SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-				SDL_RenderDrawLine(renderer, particles[i].position.x, particles[i].position.y, particles[i].position.x + particles[i].velocity.x * 10, particles[i].position.y + particles[i].velocity.y * 10);
+				SDL_RenderDrawLine(renderer, particles[i].x, particles[i].y, particles[i].x + particles[i].vx * 10, particles[i].vy + particles[i].vy * 10);
 				SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-				SDL_Rect r2{ particles[i].position.x - particles[i].lifetime / 2,particles[i].position.y - particles[i].lifetime / 2,particles[i].lifetime,particles[i].lifetime };
+				SDL_Rect r2{ particles[i].x - particles[i].lifetime / 2,particles[i].y - particles[i].lifetime / 2,particles[i].lifetime,particles[i].lifetime };
 				SDL_RenderDrawRect(renderer, &r2);
 
-			}*/
+			}
 		}
 		if (debugDraw)
 		{
@@ -188,9 +188,9 @@ public:
 
 	void AddEmitter(EmitterType type, int x, int y, int maxp)
 	{
-		Emitter emitter;
-		emitter.Init(type, x, y, maxp, type_config);
-		emitters->Add(&emitter);
+		Emitter* emitter = new Emitter;
+		emitter->Init(type, x, y, maxp, type_config);
+		emitters->Add(emitter);
 		++emitters_count;
 		particles_count += maxp;
 	}
